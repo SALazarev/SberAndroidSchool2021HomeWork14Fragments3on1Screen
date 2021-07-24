@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "HomeWork14Fragments3on1Screen"
