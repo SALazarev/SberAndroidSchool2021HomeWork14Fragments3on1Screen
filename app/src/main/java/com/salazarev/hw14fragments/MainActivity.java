@@ -18,7 +18,8 @@ public class MainActivity extends AppCompatActivity implements SecondFragment.Ca
     public static final String SECOND_FRAGMENT = "SECOND_FRAGMENT";
     private static final String THIRD_FRAGMENT = "THIRD_FRAGMENT";
 
-    private String mMessage;
+    public static final String ID = "ID";
+
     private ViewGroup mThirdContainer;
 
     private int id;
@@ -31,10 +32,8 @@ public class MainActivity extends AppCompatActivity implements SecondFragment.Ca
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState != null) {
-            mMessage = savedInstanceState.getString("str");
-            id = savedInstanceState.getInt("int");
+            id = savedInstanceState.getInt(ID);
         }
-
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -67,13 +66,12 @@ public class MainActivity extends AppCompatActivity implements SecondFragment.Ca
 
     @Override
     public void updateThirdFragment() {
-        mMessage = ff.getMessage();
         createFragment();
         Fragment f3 = getSupportFragmentManager().findFragmentByTag(THIRD_FRAGMENT);
         if (f3 == null) {
-            f3 = ThirdFragment.newInstance(mMessage);
+            f3 = ThirdFragment.newInstance(ff.getMessage());
         } else {
-            ((ThirdFragment) f3).setText(mMessage);
+            ((ThirdFragment) f3).setText(ff.getMessage());
         }
 
         getSupportFragmentManager().beginTransaction().replace(mThirdContainer.getId(), f3, THIRD_FRAGMENT).commit();
@@ -113,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements SecondFragment.Ca
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("str", mMessage);
-        outState.putInt("int", id);
+        outState.putInt(ID, id);
     }
 }
