@@ -12,26 +12,22 @@ import androidx.fragment.app.Fragment;
 
 public class SecondFragment extends Fragment {
 
-    public static SecondFragment newInstance() {
-        return new SecondFragment();
-    }
-
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.second_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Button button = view.findViewById(R.id.button);
-        if (getActivity() != null){
-            button.setOnClickListener(v -> ((Callback) getActivity()).updateThirdFragment());
+        if (getActivity() != null) {
+            button.setOnClickListener(v -> ((Callback) getActivity()).setThirdFragment());
         }
-
     }
 
     interface Callback {
-        void updateThirdFragment();
+        void setThirdFragment();
     }
 }

@@ -1,11 +1,9 @@
 package com.salazarev.hw14fragments;
 
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -18,74 +16,52 @@ public class MainActivity extends AppCompatActivity implements SecondFragment.Ca
     public static final String SECOND_FRAGMENT = "SECOND_FRAGMENT";
     private static final String THIRD_FRAGMENT = "THIRD_FRAGMENT";
 
-    public static final String ID = "ID";
-
     private ViewGroup mThirdContainer;
 
-    private int id;
+    private FirstFragment mFirstFragment;
 
-    private FirstFragment ff;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState != null) {
-            id = savedInstanceState.getInt(ID);
+        mFragmentManager = getSupportFragmentManager();
+
+        mFirstFragment = (FirstFragment) mFragmentManager.findFragmentByTag(FIRST_FRAGMENT);
+        if (mFirstFragment == null) {
+            mFirstFragment = new FirstFragment();
+            mFragmentManager.beginTransaction().add(R.id.first_fragment, mFirstFragment, FIRST_FRAGMENT).commit();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        ff = (FirstFragment) fragmentManager.findFragmentByTag(FIRST_FRAGMENT);
-        if (ff == null) {
-            ff = FirstFragment.newInstance();
-            fragmentManager.beginTransaction().add(R.id.first_fragment, ff, FIRST_FRAGMENT).commit();
+        SecondFragment secondFragment = (SecondFragment) mFragmentManager.findFragmentByTag(SECOND_FRAGMENT);
+        if (secondFragment == null) {
+            secondFragment = new SecondFragment();
+            mFragmentManager.beginTransaction().add(R.id.second_fragment, secondFragment, SECOND_FRAGMENT).commit();
         }
 
-        SecondFragment sf = (SecondFragment) fragmentManager.findFragmentByTag(SECOND_FRAGMENT);
-        if (sf == null) {
-            sf = SecondFragment.newInstance();
-            fragmentManager.beginTransaction().add(R.id.second_fragment, sf, SECOND_FRAGMENT).commit();
-        }
-
-        ThirdFragment tf = (ThirdFragment) fragmentManager.findFragmentByTag(THIRD_FRAGMENT);
+        ThirdFragment tf = (ThirdFragment) mFragmentManager.findFragmentByTag(THIRD_FRAGMENT);
         if (tf != null) {
-            createThirdFragment();
+            createThirdFragmentContainer();
         }
-
     }
-
-
-    public void createThirdFragment() {
-        createFragment2();
-        Fragment f3 = getSupportFragmentManager().findFragmentByTag(THIRD_FRAGMENT);
-        if (f3 != null) getSupportFragmentManager().beginTransaction().replace(id, f3, THIRD_FRAGMENT).commit();
-    }
-
 
     @Override
-    public void updateThirdFragment() {
-        createFragment();
-        Fragment f3 = getSupportFragmentManager().findFragmentByTag(THIRD_FRAGMENT);
+    public void setThirdFragment() {
+        createThirdFragmentContainer();
+        Fragment f3 = mFragmentManager.findFragmentByTag(THIRD_FRAGMENT);
+
         if (f3 == null) {
-            f3 = ThirdFragment.newInstance(ff.getMessage());
+            f3 = ThirdFragment.newInstance(mFirstFragment.getMessage());
         } else {
-            ((ThirdFragment) f3).setText(ff.getMessage());
+            ((ThirdFragment) f3).setText(mFirstFragment.getMessage());
         }
 
-        getSupportFragmentManager().beginTransaction().replace(mThirdContainer.getId(), f3, THIRD_FRAGMENT).commit();
+        mFragmentManager.beginTransaction().replace(R.id.third_fragment, f3, THIRD_FRAGMENT).commit();
     }
 
-    private void createFragment2() {
-        ViewGroup root = findViewById(R.id.root);
-        if (mThirdContainer == null) {
-            createContainerThirdView(id);
-            root.addView(mThirdContainer);
-        }
-    }
-
-    private void createFragment() {
+    private void createThirdFragmentContainer() {
         ViewGroup root = findViewById(R.id.root);
         if (mThirdContainer == null) {
             createContainerThirdView();
@@ -95,22 +71,8 @@ public class MainActivity extends AppCompatActivity implements SecondFragment.Ca
 
     private void createContainerThirdView() {
         mThirdContainer = new FragmentContainerView(this);
-        id = View.generateViewId();
-        mThirdContainer.setId(id);
+        mThirdContainer.setId(R.id.third_fragment);
         mThirdContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-    }
-
-    private void createContainerThirdView(int id) {
-        mThirdContainer = new FragmentContainerView(this);
-        mThirdContainer.setId(id);
-        mThirdContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(ID, id);
     }
 }

@@ -14,10 +14,6 @@ public class FirstFragment extends Fragment {
 
     private EditText mEditText;
 
-    public static FirstFragment newInstance() {
-        return new FirstFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -30,7 +26,7 @@ public class FirstFragment extends Fragment {
         mEditText = view.findViewById(R.id.edit_text);
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return mEditText.getText().toString();
     }
 }

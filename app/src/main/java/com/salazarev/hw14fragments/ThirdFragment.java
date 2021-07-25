@@ -23,23 +23,20 @@ public class ThirdFragment extends Fragment {
         thirdFragment.setArguments(bundle);
         return thirdFragment;
     }
-    public static ThirdFragment newInstance() {
-        ThirdFragment thirdFragment = new ThirdFragment();
-        return thirdFragment;
-    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.third_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mTextView = view.findViewById(R.id.text_view);
-        if (savedInstanceState!=null){
+        if (savedInstanceState != null) {
             mTextView.setText(savedInstanceState.getString(STRING_KEY));
-        }else{
+        } else {
             Bundle bundle = requireArguments();
             mTextView.setText(bundle.getString(STRING_KEY));
         }
